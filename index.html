@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>get Json Api</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container-fluid bar1">
+        <div class="row">
+            <div class="col-xl-12 menu">
+                <!-- <ul>
+                    <li>
+                        <a href="">home</a>
+                    </li>
+                    <li>
+                        <a href="">css</a>
+                    </li>
+                    <li>
+                        <a href="">Html</a>
+                    </li>
+                </ul> -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- <div class="col-xl-12 slide-ads">
+        <img src="2.jpg" alt="">
+    </div> -->
+    <div class="container" id="news-container">
+        <!-- <div class="row">
+
+            <div class="col-xl-3 col-lg-3 item-box">
+                <div class="box">
+                    <div class="img-box">
+                        <img src="1.jpeg" alt="">
+                    </div>
+                    <div class="txt-box">
+                        
+                        ខាង​ក្រោម​នេះ​ជា​កីឡាករ​ទាំង​១០រូប​ ដែល​រក​គ្រាប់​បាល់​បាន​ច្រើន​បំផុត​ឲ្យ​ក្លឹប​ Paris Saint Germain បើតាមស្ថិតិរបស់​
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 item-box">
+                <div class="box">
+                    <div class="img-box">
+                        img
+                    </div>
+                    <div class="txt-box">
+                        txt
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 item-box">
+                <div class="box">
+                    <div class="img-box">
+                        img
+                    </div>
+                    <div class="txt-box">
+                        txt
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 item-box">
+                <div class="box">
+                    <div class="img-box">
+                        img
+                    </div>
+                    <div class="txt-box">
+                        txt
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <h1>jjd</h1>
+                <p>hs</p>
+            </div>
+        </div> -->
+    </div>
+    <!-- <div class="popup">
+        <div class="loading">
+
+        </div>
+    </div> -->
+</body>
+<script>
+    var body = document.body;
+    // const popup = `
+    //         <div class="popup">
+    //             <div class="loading">
+
+    //             </div>
+    //         </div>
+    // `;
+    // body.innerHTML += popup;
+    const Ads = `
+            <div class="col-xl-12 slide-ads">
+                <img src="ads.jpeg" alt="">
+            </div>
+    `;  
+//    document.getElementById("ads-container").innerHTML += `<div class="row">${Ads}</div>`;
+    // document.getElementById("ads-container").innerHTML += `<div class="row">${Ads}</div>`;
+    // document.getElementById("ads-container").innerHTML += `<div class="row">${Newsads}</div>`;
+    const frmpopup = document.createElement("div")// <div></div>
+    const frmloading = document.createElement("div") //  <div></div>
+    frmpopup.classList.add("popup"); // <div class='popup'></div> 
+    frmloading.classList.add("loading"); // <div class='popup'></div>
+    frmpopup.appendChild(frmloading); //<div class='popup'><div class='loading'></div></div>
+    body.appendChild(frmpopup); // <body> <div class='popup'><div class='loading'></div></div> <body>
+    async function getmenu(){
+         const url = "https://reanweb.com/api/teaching/get-menu.php";
+         const rp = await fetch(url);
+         let rs = await rp.json();
+        //  console.log(rs);
+         var txt ="<li class='m1' data-id='0'> <a href='#' class='active'> <i class='fa-solid fa-house'></i></a></li>";
+         rs.forEach(e => {
+                txt += `
+                    <li class='m1' data-id=${e['id']}>
+                        <a href='#'>${e['name']}</a>
+                    </li>
+                `;
+        });
+        body.getElementsByClassName("menu")[0].innerHTML = "<ul>"+txt+"</ul>";
+        var MyMenu = document.querySelectorAll('.m1')
+        MyMenu.forEach(e=>{
+            e.addEventListener("click",function(){
+                // alert(e.dataset.id);
+                // body.innerHTML=""+img+"";
+                body.appendChild(frmpopup);
+                getNew(e.dataset.id); 
+               e.children[0].classList.add("active");
+               var myLis = e.parentElement.children; // cuz menu is element or object
+               var myLi = Array.from(myLis); // so convert to  array
+               myLi.forEach(e=>{
+                    e.children[0].classList.remove("active");
+               })
+               e.children[0].classList.add("active");
+            });
+        })
+     }
+     // new is getImg
+     var itemBox;
+     async function getNew(id){
+        const url = `https://reanweb.com/api/teaching/get-news.php?mid=${id}`;
+        const rp = await fetch(url); // rp = respone
+        let rs = await rp.json(); // rs = result
+        // console.log(rs);
+        var txt ="";
+        rs.forEach((e)=>{
+            txt += `
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6 item-box" data-id="${e['id']}">
+                        <div class="box">
+                            <div class="img-box">
+                                <img src="${e['img']}" alt="">
+                            </div>
+                            <div class="txt-box">
+                                ${e['title']}
+                            </div>
+                        </div>
+                     </div>
+            `;  
+        })
+        document.getElementById("news-container").innerHTML = "<div class='row'>"+txt+"</div>";
+        // document.getElementById("news-container").innerHTML = `<div class='row'>${txt}</div>`;
+        document.querySelector(".popup").remove();
+        // Newsads.remove();
+        var itemBox = document.querySelectorAll('.item-box');
+        itemBox.forEach(n=>{
+            n.addEventListener("click",function(){
+                getNewsDetail(n.dataset.id);
+            })
+        })
+     }
+     // get newsDetail
+     async function getNewsDetail(nid){
+        const url = `https://reanweb.com/api/teaching/get-news-detail.php?id=${nid}`;
+        const rp = await fetch(url);
+        let rs = await rp.json();
+        var txt = `
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12">
+                        <h1>${rs['title']}</h1>
+                        ${rs['des']}
+                    </div>
+                </div>
+        `;
+        document.getElementById("news-container").innerHTML = txt;
+     }
+        getmenu();
+        getNew(0);
+        getNewsDetail();
+</script>
+</html>
